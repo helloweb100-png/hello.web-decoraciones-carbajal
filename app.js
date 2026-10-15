@@ -16,8 +16,8 @@
      CONFIGURACIÓN: lo único que normalmente hay que editar
      ====================================================================== */
   const CONFIG = {
-    whatsapp: '520000000000',        // Número con código de país, sin "+" ni espacios (ej. 5212223334444)
-    phoneLabel: '+52 000 000 0000',  // Cómo se muestra el teléfono en pantalla
+    whatsapp: '5219541204137',       // Número con código de país, sin "+" ni espacios (ej. 5212223334444)
+    phoneLabel: '+52 954 120 4137',  // Cómo se muestra el teléfono en pantalla
     messages: {
       header:    'Hola CADSA Decoraciones, quiero cotizar para mi casa.',
       hero:      'Hola CADSA Decoraciones, quiero mi cotización. Me interesa vestir mi casa.',

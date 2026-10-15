@@ -295,6 +295,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .js .line-in { transform: translateY(118%); }
 .js.is-ready .line-in { transform: none; transition-delay: .15s; }
 .js.is-ready .line:nth-child(2) .line-in { transition-delay: .3s; }
+.hero-title .line:nth-child(2) { margin-top: .34em; margin-bottom: .18em; }   /* aire arriba y abajo de "con + palabra animada" */
 .rot { display: inline-block; height: 1.22em; overflow: hidden; vertical-align: bottom; position: relative; transition: width .9s var(--ease); }
 .rot-track { display: block; transition: transform 1.1s var(--ease); }
 .rot em {
@@ -597,6 +598,12 @@ html:not(.js) .pr-bar { display: none; }
 .contact-wa-txt { display: grid; line-height: 1.2; }
 .contact-wa-txt small { font-size: .82rem; color: var(--mut-d); }
 .contact-wa-txt b { font-size: 1.3rem; font-weight: 700; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.contact-mail { display: inline-flex; align-items: center; gap: 29px; max-width: 100%; padding-left: 25px; }
+.contact-mail .ico { width: 26px; height: 26px; color: var(--accent); }
+.contact-mail-txt { display: grid; min-width: 0; line-height: 1.25; }
+.contact-mail-txt small { font-size: .82rem; color: var(--mut-d); }
+.contact-mail-txt b { font-size: 1.05rem; font-weight: 600; letter-spacing: -.01em; overflow-wrap: anywhere; }
+.contact-mail:hover .contact-mail-txt b { color: var(--accent-hi); text-decoration: underline; text-underline-offset: 4px; }
 
 .form { display: grid; gap: 18px; padding: clamp(22px, 3vw, 40px); border-radius: 24px; background: var(--paper); color: var(--txt-l); box-shadow: 0 50px 90px -34px rgba(0, 0, 0, .7); --focus: var(--accent-deep); }
 .form h3 { font-size: clamp(1.5rem, 3vw, 1.9rem); font-weight: 700; letter-spacing: -.035em; }
@@ -631,6 +638,7 @@ html:not(.js) .pr-bar { display: none; }
 .ft-col h3 { font-size: 1rem; font-weight: 700; margin-bottom: 10px; }
 .ft-col a:not(.btn) { padding: 6px 0; color: var(--mut-d); transition: color .3s, translate .4s var(--ease); width: fit-content; max-width: 100%; }
 .ft-col a:not(.btn):hover { color: #fff; translate: 4px 0; }
+.ft-col a[href^="mailto:"] { overflow-wrap: anywhere; }
 .ft-col .btn { margin-top: 12px; width: max-content; }
 .ft-giant {
   margin: clamp(36px, 8vw, 90px) 0 0; text-align: center; font-size: min(25vw, 21rem); font-weight: 700; line-height: .8; letter-spacing: -.07em;
@@ -722,6 +730,7 @@ html:not(.js) .pr-bar { display: none; }
       linear-gradient(180deg, rgba(6, 21, 25, .5) 0, transparent 22%, transparent 78%, var(--ink) 100%);
   }
   .hero-title { font-size: clamp(2.6rem, 6.1vw, 5rem); }
+  .hero-title .line:nth-child(2) { margin-top: .22em; margin-bottom: .06em; }
   .hero-grid { min-height: calc(100svh - 190px); display: grid; align-items: center; }
   .hd-nav { display: flex; gap: 2px; margin-inline: auto; }
   .brand { margin-right: 0; }
