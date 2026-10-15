@@ -32,6 +32,8 @@
       contacto:  'Hola CADSA Decoraciones, me gustaría recibir información.',
       idea:      'Hola, tengo una idea para renovar mi espacio y quiero contársela.',
       band:      'Hola, quiero empezar mi proyecto. ¿Me pueden orientar?',
+      telas:     'Hola, vi en su página que son distribuidores de Sunbrella y otras marcas. Quiero ver las telas disponibles para mi proyecto.',
+      telasfin:  'Hola, vi las telas en su página y quiero elegir la mía. ¿Me pueden orientar?',
       float:     'Hola CADSA Decoraciones, vengo de su página web y quiero cotizar.'
     }
   };
@@ -607,6 +609,77 @@
     const dx = e.clientX - sx; sx = null;
     if (Math.abs(dx) > 60) lbShow(lbIndex + (dx < 0 ? 1 : -1));
   });
+
+  /* ======================================================================
+     11b. Telas: carrusel y visor de muestrarios
+     ====================================================================== */
+  const fbRail = $('.fb-rail');
+  if (fbRail) {
+    const fb = fbRail.closest('.fabrics');
+    const fbBar = $('.fb-bar', fb), fbPrev = $('.fb-prev', fb), fbNext = $('.fb-next', fb);
+    const fbCount = $('[data-count]', fb);
+    if (fbCount && hasIO && !reduce) fbCount.textContent = '0';   // el contador sube hasta 1000 al entrar en pantalla
+
+    const fbUpdate = () => {
+      const max = fbRail.scrollWidth - fbRail.clientWidth;
+      fbBar.style.setProperty('--tp', (max > 0 ? (fbRail.scrollLeft + fbRail.clientWidth) / fbRail.scrollWidth : 1).toFixed(4));
+      fbPrev.disabled = fbRail.scrollLeft < 8;
+      fbNext.disabled = fbRail.scrollLeft > max - 8;
+    };
+    const fbStep = dir => fbRail.scrollBy({ left: dir * Math.max(260, fbRail.clientWidth * .6), behavior: reduce ? 'auto' : 'smooth' });
+    fbRail.addEventListener('scroll', fbUpdate, { passive: true });
+    fbPrev.addEventListener('click', () => fbStep(-1));
+    fbNext.addEventListener('click', () => fbStep(1));
+    addEventListener('resize', fbUpdate);
+    addEventListener('load', fbUpdate);
+    fbUpdate();
+
+    // Visor: mismo estilo que el de la galería, con su propio <dialog> para no mezclar las listas
+    const tl = $('#tl-viewer');
+    const tlImg = $('.lb-img', tl), tlCap = $('.lb-cap', tl), tlCta = $('.lb-cta', tl);
+    const tlBtns = $$('.fb-open', fbRail);
+    let tlIndex = 0, tlOpener = null;
+
+    function tlShow(i) {
+      const n = tlBtns.length;
+      const idx = tlIndex = (i + n) % n;
+      const btn = tlBtns[idx], img = $('img', btn), name = btn.dataset.name;
+      tlImg.classList.remove('is-in');
+      const next = new Image();
+      next.onload = () => { if (idx !== tlIndex) return; tlImg.src = next.src; tlImg.alt = img.alt; requestAnimationFrame(() => tlImg.classList.add('is-in')); };
+      next.src = img.dataset.full || img.src;
+      tlCap.textContent = `${name} · ${$('.fb-cap span', btn.closest('li')).textContent}`;
+      tlCta.href = waUrl(`Hola, vi en su página el muestrario ${name} y quiero cotizar con estas telas. ¿Me orientan?`);
+      tlCta.target = '_blank'; tlCta.rel = 'noopener';
+      [idx + 1, idx - 1].forEach(j => { const pre = new Image(); const im = $('img', tlBtns[(j + n) % n]); pre.src = im.dataset.full || im.src; });
+    }
+    function tlOpen(i) {
+      tlOpener = tlBtns[i];
+      if (typeof tl.showModal === 'function') tl.showModal(); else tl.setAttribute('open', '');
+      root.style.overflow = 'hidden';
+      tlShow(i);
+    }
+    const tlClose = () => { if (tl.open) tl.close(); };
+    tlBtns.forEach((b, i) => b.addEventListener('click', () => tlOpen(i)));
+    $('.lb-x', tl).addEventListener('click', tlClose);
+    $('.lb-prev', tl).addEventListener('click', () => tlShow(tlIndex - 1));
+    $('.lb-next', tl).addEventListener('click', () => tlShow(tlIndex + 1));
+    tl.addEventListener('close', () => { if (!menuOpen) root.style.overflow = ''; if (tlOpener) tlOpener.focus({ preventScroll: true }); });
+    tl.addEventListener('click', e => { if (e.target.classList.contains('lb-inner') || e.target === tl) tlClose(); });
+    tlCta.addEventListener('click', () => setTimeout(tlClose, 150));
+    addEventListener('keydown', e => {
+      if (!tl.open) return;
+      if (e.key === 'ArrowRight') tlShow(tlIndex + 1);
+      if (e.key === 'ArrowLeft') tlShow(tlIndex - 1);
+    });
+    let tsx = null;
+    tl.addEventListener('pointerdown', e => { tsx = e.clientX; });
+    tl.addEventListener('pointerup', e => {
+      if (tsx === null) return;
+      const dx = e.clientX - tsx; tsx = null;
+      if (Math.abs(dx) > 60) tlShow(tlIndex + (dx < 0 ? 1 : -1));
+    });
+  }
 
   /* ======================================================================
      12. FAQ
